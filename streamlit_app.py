@@ -3,9 +3,7 @@ from stmol import showmol
 import py3Dmol
 import requests
 import biotite.structure.io as bsio
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #st.set_page_config(layout = 'wide')
 st.sidebar.title('🎈 ESMFold')
@@ -32,10 +30,8 @@ def update(sequence=txt):
         'Content-Type': 'application/x-www-form-urlencoded',
     }
 
-    try:
-        response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=sequence)
-    except requests.exceptions.SSLError as e:
-        print(f'oops! got the following SSL error: {e}')
+    response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=sequence, verify=False)
+   
         
     name = sequence[:3] + sequence[-3:]
     pdb_string = response.content.decode('utf-8')
