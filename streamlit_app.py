@@ -32,8 +32,11 @@ def update(sequence=txt):
         'Content-Type': 'application/x-www-form-urlencoded',
     }
 
-    response = requests.get("https://example.com/", verify=False)
-    response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=sequence)
+    try:
+        response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=sequence)
+    except requests.exceptions.SSLError as e:
+        print(f'oops! got the following SSL error: {e}')
+        
     name = sequence[:3] + sequence[-3:]
     pdb_string = response.content.decode('utf-8')
 
