@@ -1,11 +1,11 @@
-# This is app is created by Chanin Nantasenamat (Data Professor) https://youtube.com/dataprofessor
-# Credit: This app is inspired by https://huggingface.co/spaces/osanseviero/esmfold
-
 import streamlit as st
 from stmol import showmol
 import py3Dmol
 import requests
 import biotite.structure.io as bsio
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #st.set_page_config(layout = 'wide')
 st.sidebar.title('🎈 ESMFold')
@@ -31,6 +31,8 @@ def update(sequence=txt):
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
     }
+
+    response = requests.get("https://example.com/", verify=False)
     response = requests.post('https://api.esmatlas.com/foldSequence/v1/pdb/', headers=headers, data=sequence)
     name = sequence[:3] + sequence[-3:]
     pdb_string = response.content.decode('utf-8')
